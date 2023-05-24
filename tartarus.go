@@ -5,6 +5,7 @@ import (
 	"os"
 	"errors"
 	"crypto/rand"
+	"fmt"
 )
 
 // isValid checks that the file pointed to by the path
@@ -17,8 +18,8 @@ func isValid(abspath string) (int64, error) {
 		return 0, err
 	}
 	mode := fi.Mode()
-	if mode&os.ModePerm == os.ModePerm {
-		return 0, errors.New("insufficient permissions to write")
+	if _, err := os.OpenFile(abspath, os.O_RDWR, 0666); err != nil {
+		return 0, errors.New("can't read/write to file")
 	}
 	if !mode.IsRegular() {
 		return 0, errors.New("path points to directory, pipe file or physical device")
@@ -36,7 +37,7 @@ func oWrite(abspath string) error {
 	}
 
 	f, err := os.Create(abspath)
-	if err != nil {
+	if err != nil { // Can't really reach this, but don't feel confident in removing the error check, just in case
 		return err
 	}
 
@@ -80,7 +81,6 @@ func Shred(path string) error {
 	if err != nil {
 		return err
 	}
-
 	err = os.Remove(abspath)
 	return err
 }
