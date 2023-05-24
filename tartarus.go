@@ -1,10 +1,13 @@
+/*
+	Tartarus is a library for somewhat securely removing files.
+*/
 package tartarus
 
 import (
-	"path/filepath"
-	"os"
-	"errors"
 	"crypto/rand"
+	"errors"
+	"os"
+	"path/filepath"
 )
 
 // isValid checks that the file pointed to by the path
@@ -26,7 +29,6 @@ func isValid(abspath string) (int64, error) {
 	return fi.Size(), nil
 }
 
-
 // oWrite overwrites the file at the given path 3 times
 // with random data
 func oWrite(abspath string) error {
@@ -38,7 +40,7 @@ func oWrite(abspath string) error {
 	f, err := os.Create(abspath)
 	// Shouldn't really happen if we checked permissions and everything
 	// But nonetheless
-	if err != nil { 
+	if err != nil {
 		return err
 	}
 
@@ -57,11 +59,11 @@ func oWrite(abspath string) error {
 
 	for i := int64(0); i < size; i += inc {
 		bufsize := inc
-		if i + inc > size {
+		if i+inc > size {
 			bufsize = size - i
 		}
 		buf := make([]byte, bufsize)
-		if _, err := rand.Read(buf); err != nil{
+		if _, err := rand.Read(buf); err != nil {
 			return err
 		}
 		if _, err := f.Write(buf); err != nil {
@@ -74,6 +76,8 @@ func oWrite(abspath string) error {
 	return nil
 }
 
+// Shred rewrites data in a file at a given path 3 times.
+// After that it deletes the file
 func Shred(path string) error {
 	abspath, err := filepath.Abs(path)
 	if err != nil {

@@ -34,5 +34,5 @@ Coverage is checked with ``go tool cover -html=cover.out``
 ### Disadvantages:
 - Can't guarantee complete data erasure, physical destruction required
 - Time-consuming for large files
-- Permanent deletion (backup before running, if there is a slight chance the data may be neede)
+- Permanent deletion (backup before running, if there is a slight chance the data may be needed)
 - File system specific errors aren't handled (yet)
