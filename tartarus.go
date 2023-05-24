@@ -48,8 +48,10 @@ func oWrite(abspath string) error {
 			}
 		}
 	}()
-	// Writing in increments of 128 bytes or less, depending on file size
-	inc := int64(10000)
+	// Writing in increments of 2048 bytes or less, depending on file size
+	// (will considerably slow down with huge files), good idea, to implement
+	// a helper function which calls shred with different buffer sizes (depending on allowed buffer size)
+	inc := int64(2048)
 
 	for i := int64(0); i < size; i += inc {
 		bufsize := inc

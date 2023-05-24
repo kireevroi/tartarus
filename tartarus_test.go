@@ -72,6 +72,11 @@ func TestShredValid(t *testing.T) {
 			"tests/bigfile",
 			nil,
 		},
+		{
+			"Unicode text file",
+			"tests/unicode",
+			nil,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
