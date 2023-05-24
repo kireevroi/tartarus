@@ -100,28 +100,24 @@ func TestOWrite(t *testing.T) {
 	}
 
 	buffer := make([]byte, 1024)
-	n, err := file.Read(buffer)
-	if err.Error() != "EOF" {
-		t.Error("initial test file too big")
-	}
+	n, _ := file.Read(buffer)
 	file.Close()
 
 	got := oWrite("./tests/testscramble")
 	if got != nil {
 		t.Errorf("got an error: %v", got)
 	}
-	file, err = os.Open("./tests/testscramble")
+
+	file2, err := os.Open("./tests/testscramble")
 	if err != nil {
 		t.Error("couldn't open scrambled file")
 	}
 
 	buffer_new := make([]byte, 1024)
 
-	n_new, err := file.Read(buffer_new)
-	if err.Error() != "EOF" {
-		t.Error("scrambled test file too big")
-	}
-	file.Close()
+	n_new, _ := file2.Read(buffer_new)
+	file2.Close()
+	
 	if n_new != n {
 		t.Error("file scrambled incorrectly (size problem)")
 	}
