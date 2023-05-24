@@ -9,7 +9,7 @@ import (
 
 func TestShredDirectory(t *testing.T) {
 	// Run the Shred function with an invalid file path
-	err := Shred("testfiles")
+	err := Shred("test")
 	if err == nil {
 		t.Error("Expected error for irregular file")
 	}
@@ -117,7 +117,7 @@ func TestOWrite(t *testing.T) {
 
 	n_new, _ := file2.Read(buffer_new)
 	file2.Close()
-	
+
 	if n_new != n {
 		t.Error("file scrambled incorrectly (size problem)")
 	}
