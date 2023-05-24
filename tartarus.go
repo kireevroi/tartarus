@@ -5,7 +5,6 @@ import (
 	"os"
 	"errors"
 	"crypto/rand"
-	"fmt"
 )
 
 // isValid checks that the file pointed to by the path
