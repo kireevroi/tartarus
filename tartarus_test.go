@@ -1,8 +1,9 @@
 package tartarus
 
 import (
-	"path/filepath"
+	"bytes"
 	"os"
+	"path/filepath"
 	"testing"
 )
 
@@ -89,6 +90,43 @@ func TestShredValid(t *testing.T) {
 				t.Error("file wasn't deleted")
 			}
 		})
+	}
+}
+
+func TestOWrite(t *testing.T) {
+	file, err := os.Open("./tests/testscramble")
+	if err != nil {
+		t.Error("couldn't open initial file")
+	}
+
+	buffer := make([]byte, 1024)
+	n, err := file.Read(buffer)
+	if err.Error() != "EOF" {
+		t.Error("initial test file too big")
+	}
+	file.Close()
+
+	got := oWrite("./tests/testscramble")
+	if got != nil {
+		t.Errorf("got an error: %v", got)
+	}
+	file, err = os.Open("./tests/testscramble")
+	if err != nil {
+		t.Error("couldn't open scrambled file")
+	}
+
+	buffer_new := make([]byte, 1024)
+
+	n_new, err := file.Read(buffer_new)
+	if err.Error() != "EOF" {
+		t.Error("scrambled test file too big")
+	}
+	file.Close()
+	if n_new != n {
+		t.Error("file scrambled incorrectly (size problem)")
+	}
+	if bytes.Equal(buffer, buffer_new) {
+		t.Error("file didn't scramble at all")
 	}
 }
 

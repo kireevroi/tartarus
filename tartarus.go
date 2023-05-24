@@ -36,7 +36,9 @@ func oWrite(abspath string) error {
 	}
 
 	f, err := os.Create(abspath)
-	if err != nil { // Can't really reach this, but don't feel confident in removing the error check, just in case
+	// Shouldn't really happen if we checked permissions and everything
+	// But nonetheless
+	if err != nil { 
 		return err
 	}
 
@@ -73,7 +75,6 @@ func oWrite(abspath string) error {
 }
 
 func Shred(path string) error {
-	// Turning path into absolute value
 	abspath, err := filepath.Abs(path)
 	if err != nil {
 		return err
