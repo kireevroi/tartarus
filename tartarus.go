@@ -49,7 +49,8 @@ func oWrite(abspath string) error {
 		}
 	}()
 	// Writing in increments of 128 bytes or less, depending on file size
-	inc := int64(128)
+	inc := int64(10000)
+
 	for i := int64(0); i < size; i += inc {
 		bufsize := inc
 		if i + inc > size {

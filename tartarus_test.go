@@ -40,20 +40,20 @@ func TestShredPipe(t *testing.T) {
 		t.Error("Expected error for irregular file")
 	}
 }
-// func TestShredInvalidPath(t *testing.T) {
-// 	// Run the Shred function with a failure in Abs path
-// 	dir, _ := os.MkdirTemp("", "") 
-//   os.Chdir(dir)                  
-//   os.RemoveAll(dir)              
-// 	err := Shred("")
-// 	orig, _ := os.Getwd()
-//   t.Cleanup(func() {
-//       os.Chdir(orig)
-//   })
-// 	if err == nil {
-// 		t.Error("Expected error for invalid path")
-// 	}
-// }
+func TestShredInvalidPath(t *testing.T) {
+	// Run the Shred function with a failure in Abs path
+	orig, _ := os.Getwd()
+	dir, _ := os.MkdirTemp("", "") 
+  os.Chdir(dir)                  
+  os.RemoveAll(dir)              
+	err := Shred("")
+  t.Cleanup(func() {
+      os.Chdir(orig)
+  })
+	if err == nil {
+		t.Error("Expected error for invalid path")
+	}
+}
 
 
 func TestShredValid(t *testing.T) {
@@ -67,6 +67,11 @@ func TestShredValid(t *testing.T) {
 			"tests/randomfile.txt",
 			nil,
 		},
+		{
+			"Big file test",
+			"tests/bigfile",
+			nil,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -75,7 +80,7 @@ func TestShredValid(t *testing.T) {
 				t.Errorf("got an error: %v", got)
 			}
 			path, _ := filepath.Abs(tt.input)
-			if _, err := os.Stat(path); err == nil {
+			if _, err := os.Stat(path); !os.IsNotExist(err) {
 				t.Error("file wasn't deleted")
 			}
 		})
