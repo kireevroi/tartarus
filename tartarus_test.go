@@ -29,6 +29,7 @@ func TestShredNonExistentFile(t *testing.T) {
 	}
 }
 func TestShredInvalidPermissions(t *testing.T) {
+	os.Chmod("tests/nopermission.txt", 0444)
 	err := Shred("tests/nopermission.txt")
 	if err == nil {
 		t.Error("Expected error for no permissions")
